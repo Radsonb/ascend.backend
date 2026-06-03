@@ -1,0 +1,52 @@
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id String @id @default(uuid())
+  email String @unique
+  password String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  address Address?
+  profile Profile?
+
+  @@map("users")
+}
+
+model Address {
+  id String @id @default(uuid())
+  street String
+  number String
+  complement String
+  neighborhood String
+  city String
+  state String
+  zip_code String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  user_id String @unique
+  user User @relation(fields: [user_id], references: [id])
+
+  @@map("addresses")
+}
+
+model Profile {
+  id String @id @default(uuid())
+  name String
+  phone_number String
+  birth_date DateTime
+  weight Float
+  height Float
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  user_id String @unique
+  user User @relation(fields: [user_id], references: [id])
+
+  @@map("profiles")
+}
